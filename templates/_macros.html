@@ -1,0 +1,22 @@
+{% macro card_face(card, orientation=None, small=False) %}
+<div class="tarot {{ 'suit-' ~ (card.suit|lower if card.suit else 'major') }}{{ ' small' if small }}{{ ' is-reversed' if orientation == 'reversed' }}">
+  <div class="tarot-top">{{ card.numeral }}</div>
+  <div class="tarot-art">
+    {% if card.image_path %}<img src="{{ url_for('static', filename=card.image_path) }}" alt="{{ card.name }}">
+    {% else %}<span class="glyph">{{ card.symbol }}</span>{% endif %}
+  </div>
+  <div class="tarot-name">{{ card.name }}</div>
+  <div class="tarot-sub">{{ card.archetype }}</div>
+</div>
+{% endmacro %}
+
+{% macro demo_badge(is_demo) %}
+{% if is_demo %}<span class="badge demo" title="Placeholder value. Run the analysis scripts and re-seed to replace it.">DEMO</span>{% endif %}
+{% endmacro %}
+
+{% macro window(title) %}
+<section class="window">
+  <div class="titlebar"><span>{{ title }}</span><span class="wbtns">_ □ ×</span></div>
+  <div class="window-body">{{ caller() }}</div>
+</section>
+{% endmacro %}

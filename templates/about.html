@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_macros.html" import window %}
+{% block title %}About the Order{% endblock %}
+{% block content %}
+<h2 class="page-title">About the Order</h2>
+
+{% call window("A brief history of the Order") %}
+  <p>The Order of the Financial Arcana established its online presence in 2001 and has, for reasons no one can document,
+     remained operational ever since. It holds that every transaction leaves a trace, every market fluctuation carries an omen,
+     and every financial decision contributes to a larger economic destiny.</p>
+  <p>Its 78 Arcana are a financial reading of the traditional tarot: 22 Major Arcana for the large forces and institutions of
+     economic life, and 56 Minor Arcana in four suits: Wands (ambition and speculation), Cups (desire and consumer behavior),
+     Swords (risk and regulation) and Pentacles (wealth and consumption).</p>
+{% endcall %}
+
+{% call window("Purpose") %}
+  <p>We have replaced mysticism with mathematics, but our desire to predict, control and assign meaning to an uncertain future
+     remains largely unchanged. This project uses the parallel between divination and financial prediction as a satirical frame.
+     It does not claim the two are equivalent.</p>
+{% endcall %}
+
+{% call window("Methodology: three things, kept apart") %}
+  <ul>
+    <li><b>Observed data</b>: rows in the source datasets, processed offline with Python and Pandas.</li>
+    <li><b>Calculated metrics</b>: statistics computed from those rows (rates, medians, counts), each with its definition and sample size. Values marked <span class="badge demo">DEMO</span> are placeholders.</li>
+    <li><b>Authored interpretation</b>: card meanings and the Order's commentary. This is fiction. The link between a card and a metric is a symbolic choice, not a finding.</li>
+  </ul>
+  <p>A reading draws cards at random without replacement. The metric shown with each card is frozen at draw time.</p>
+{% endcall %}
+
+{% call window("Data sources") %}
+  <ul>
+    {% for d in datasets %}<li><a href="{{ d.source_url }}">{{ d.name }}</a> <span class="dim">· {{ d.processing_notes }}</span></li>{% endfor %}
+  </ul>
+{% endcall %}
+
+{% call window("Limitations & disclaimer") %}
+  <ul>
+    <li>The transaction datasets are synthetic. They are not real financial histories and may not represent any real population.</li>
+    <li>Fraud and laundering labels are classifications in the datasets, not independent proof of criminal activity.</li>
+    <li>Correlation is not causation. Transaction data cannot establish a person's wealth, debts or intentions.</li>
+    <li>Readings are random entertainment. Nothing here is financial advice, a prediction of your outcomes, or a fraud-detection service.</li>
+  </ul>
+  <p class="dim"><i>Please consult your financial representative before interpreting this omen.</i></p>
+{% endcall %}
+{% endblock %}

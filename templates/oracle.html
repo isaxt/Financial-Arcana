@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_macros.html" import window %}
+{% block title %}The Oracle{% endblock %}
+{% block content %}
+<h2 class="page-title">The Oracle</h2>
+<p class="intro">Choose a spread. Cards are drawn without replacement and may appear upright or reversed.
+  Each card is paired with a real figure from the Ledger, kept separate from the Order's commentary.</p>
+
+<div class="spread-grid">
+  {% for s in spreads %}
+  {% call window(s.name) %}
+    <p>{{ s.description }}</p>
+    <p class="mono dim small">{{ s.card_count }} card{{ 's' if s.card_count > 1 }} · {{ s.positions | join(' / ') }}</p>
+    <form method="post" action="{{ url_for('oracle_draw') }}">
+      <input type="hidden" name="spread" value="{{ s.slug }}">
+      <button class="btn" type="submit">Draw the cards</button>
+    </form>
+  {% endcall %}
+  {% endfor %}
+</div>
+{% endblock %}

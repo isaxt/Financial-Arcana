@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}My Readings{% endblock %}
+{% block content %}
+<h2 class="page-title">My Readings</h2>
+<p class="intro">Readings are stored in the Order's database and tied to this browser. No account is required.</p>
+
+{% if readings %}
+<table class="ledger-table mono">
+  <thead><tr><th>#</th><th>Date (UTC)</th><th>Spread</th><th>Cards</th><th></th></tr></thead>
+  <tbody>
+  {% for r in readings %}
+    <tr>
+      <td>{{ '%05d' % r.reading_id }}</td>
+      <td>{{ r.created_at.strftime('%m/%d/%Y %H:%M') }}</td>
+      <td><a href="{{ url_for('reading', reading_id=r.reading_id) }}">{{ r.title }}</a></td>
+      <td>{{ r.cards | map(attribute='card.name') | join(', ') }}</td>
+      <td>
+        <form class="inline" method="post" action="{{ url_for('reading_delete', reading_id=r.reading_id) }}"
+              onsubmit="return confirm('Strike this reading from the record?');">
+          <button class="btn danger tiny" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No readings on file. <a href="{{ url_for('oracle') }}">Consult the Oracle</a>.</p>
+{% endif %}
+{% endblock %}

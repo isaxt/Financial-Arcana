@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import window, demo_badge %}
+{% block title %}{{ m.display_name }}{% endblock %}
+{% block content %}
+<p class="mono small"><a href="{{ url_for('ledger') }}">◂ The Ledger</a></p>
+<h2 class="page-title">{{ m.display_name }}</h2>
+{% call window("Metric record: " ~ m.metric_name) %}
+  <div class="stat-value mono big">{{ m.value|fmt_value(m.unit) }} {{ demo_badge(m.is_demo) }}</div>
+  <table class="kv mono">
+    <tr><td>Dataset</td><td>{{ m.dataset.name }}</td></tr>
+    <tr><td>Source</td><td><a href="{{ m.dataset.source_url }}">{{ m.dataset.source_url }}</a></td></tr>
+    <tr><td>Sample size</td><td>{% if m.is_demo %}n/a (demo){% else %}{{ '{:,}'.format(m.sample_size) }}{% endif %}</td></tr>
+    <tr><td>Unit</td><td>{{ m.unit }}</td></tr>
+    <tr><td>Calculated</td><td>{{ m.calculation_date.strftime('%Y-%m-%d') if m.calculation_date }}</td></tr>
+  </table>
+  <p><b>What it is.</b> {{ m.description }}</p>
+  <p><b>How it was calculated.</b> {{ m.methodology }}</p>
+  {% if m.is_demo %}<p class="dim">This is a placeholder. The real value appears once the processing script has been run.</p>{% endif %}
+{% endcall %}
+
+<h3>Cards that cite this metric</h3>
+<ul class="plain">
+  {% for l in m.card_links %}
+  <li><a href="{{ url_for('card_detail', card_id=l.card.card_id) }}">{{ l.card.name }}</a>
+    <span class="dim">· {{ l.relationship_label }}: {{ l.explanation }}</span></li>
+  {% else %}<li class="dim">No card cites this metric.</li>{% endfor %}
+</ul>
+<p class="mono dim small">Card mappings are symbolic choices by the project author, not established associations.</p>
+{% endblock %}

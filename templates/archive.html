@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card_face %}
+{% block title %}The Archive{% endblock %}
+{% block content %}
+<h2 class="page-title">The Archive</h2>
+<p class="intro">All 78 Financial Arcana. Search by name, archetype or keyword, or filter by arcana, suit and domain.</p>
+
+<form class="filters mono" method="get" action="{{ url_for('archive') }}" id="filter-form">
+  <input type="search" name="q" value="{{ f.q }}" placeholder="search the archive…">
+  <select name="arcana">
+    <option value="">All arcana</option>
+    <option value="Major" {{ 'selected' if f.arcana == 'Major' }}>Major (22)</option>
+    <option value="Minor" {{ 'selected' if f.arcana == 'Minor' }}>Minor (56)</option>
+  </select>
+  <select name="suit">
+    <option value="">All suits</option>
+    {% for s in suits %}<option value="{{ s }}" {{ 'selected' if f.suit == s }}>{{ s }}</option>{% endfor %}
+  </select>
+  <select name="domain">
+    <option value="">All domains</option>
+    {% for d in domains %}<option value="{{ d }}" {{ 'selected' if f.domain == d }}>{{ d }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Search</button>
+  <a class="btn ghost" href="{{ url_for('archive') }}">Reset</a>
+</form>
+
+<p class="mono dim small">{{ cards|length }} of 78 cards shown</p>
+
+<div class="card-grid">
+  {% for c in cards %}
+  <a class="grid-card" href="{{ url_for('card_detail', card_id=c.card_id) }}">
+    {{ card_face(c, small=True) }}
+    <span class="mono dim small">{{ c.code }} · {{ c.financial_domain }}</span>
+  </a>
+  {% else %}
+  <p>The archive has no record matching that query.</p>
+  {% endfor %}
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/archive.js') }}"></script>{% endblock %}

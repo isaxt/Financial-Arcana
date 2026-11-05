@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card_face, demo_badge %}
+{% block title %}{{ card.name }}{% endblock %}
+{% block content %}
+<p class="mono small">
+  {% if prev_card %}<a href="{{ url_for('card_detail', card_id=prev_card.card_id) }}">◂ {{ prev_card.name }}</a>{% endif %}
+  <span class="spacer"></span>
+  <a href="{{ url_for('archive') }}">Archive</a>
+  <span class="spacer"></span>
+  {% if next_card %}<a href="{{ url_for('card_detail', card_id=next_card.card_id) }}">{{ next_card.name }} ▸</a>{% endif %}
+</p>
+
+<div class="card-detail">
+  <div class="card-detail-art">{{ card_face(card) }}
+    <p class="mono dim small">Card {{ card.code }} · {{ card.arcana }}{% if card.suit %} · {{ card.suit }}{% endif %}</p>
+  </div>
+
+  <div>
+    <h2 class="page-title">{{ card.name }}</h2>
+    <p class="mono">Archetype: <b>{{ card.archetype }}</b> · Domain: {{ card.financial_domain }}</p>
+    <p>{% for k in card.keyword_list %}<span class="chip mono">{{ k }}</span>{% endfor %}</p>
+
+    <div class="layer symbolic">
+      <div class="layer-label mono">Traditional meaning</div>
+      <p>{{ card.traditional_meaning }}</p>
+    </div>
+    <div class="layer symbolic">
+      <div class="layer-label mono">Upright · financial interpretation <span class="tag">authored</span></div>
+      <p>{{ card.upright_meaning }}</p>
+    </div>
+    <div class="layer symbolic">
+      <div class="layer-label mono">Reversed · financial interpretation <span class="tag">authored</span></div>
+      <p>{{ card.reversed_meaning }}</p>
+    </div>
+
+    <div class="layer evidence">
+      <div class="layer-label mono">Statistical evidence <span class="tag calc">calculated</span></div>
+      {% for l in links %}
+        {% set m = l.metric %}
+        <div class="stat">
+          <div class="stat-value mono">{{ m.value|fmt_value(m.unit) }} {{ demo_badge(m.is_demo) }}</div>
+          <div><a href="{{ url_for('ledger_metric', metric_name=m.metric_name) }}">{{ m.display_name }}</a></div>
+          <div class="mono dim small">{{ m.dataset.name }}{% if not m.is_demo and m.sample_size %} · n = {{ '{:,}'.format(m.sample_size) }}{% endif %}</div>
+          <div class="dim small">Symbolic mapping ({{ l.relationship_label }}): {{ l.explanation }}</div>
+        </div>
+      {% else %}
+        <p class="dim">No dataset metric is linked to this card. Its meaning is symbolic only.</p>
+      {% endfor %}
+    </div>
+
+    {% if related %}
+    <h3>Related cards</h3>
+    <div class="card-grid compact">
+      {% for r in related %}
+      <a class="grid-card" href="{{ url_for('card_detail', card_id=r.card_id) }}">{{ card_face(r, small=True) }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

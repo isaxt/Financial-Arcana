@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card_face, demo_badge %}
+{% block title %}{{ reading.title }}{% endblock %}
+{% block content %}
+<h2 class="page-title">{{ reading.title }}</h2>
+<p class="mono dim">Reading #{{ '%05d' % reading.reading_id }} · {{ reading.created_at.strftime('%m/%d/%Y %H:%M') }} UTC · {{ reading.cards|length }} card{{ 's' if reading.cards|length > 1 }}</p>
+
+<div class="reading">
+  {% for rc in reading.cards %}
+  {% set card = rc.card %}
+  <article class="draw" style="animation-delay: {{ loop.index0 * 0.35 }}s">
+    <div class="draw-card">
+      <div class="position mono">{{ positions[loop.index0] if loop.index0 < positions|length else 'Card ' ~ rc.position }}</div>
+      <a href="{{ url_for('card_detail', card_id=card.card_id) }}">{{ card_face(card, rc.orientation) }}</a>
+      <div class="mono dim small">{{ rc.orientation|upper }}</div>
+    </div>
+
+    <div class="draw-text">
+      <h3>{{ card.name }} <small>· {{ card.archetype }}</small></h3>
+
+      <div class="layer symbolic">
+        <div class="layer-label mono">I · Symbolic interpretation <span class="tag">authored</span></div>
+        <p>{{ card.reversed_meaning if rc.orientation == 'reversed' else card.upright_meaning }}</p>
+        <p class="dim small"><i>Traditional meaning:</i> {{ card.traditional_meaning }}</p>
+        {% if rc.note %}<p class="dim small">{{ rc.note }}</p>{% endif %}
+      </div>
+
+      <div class="layer evidence">
+        <div class="layer-label mono">II · Statistical evidence <span class="tag calc">calculated</span></div>
+        {% if rc.snapshot %}
+          {% for s in rc.snapshot %}
+          <div class="stat">
+            <div class="stat-value mono">{{ s.value|fmt_value(s.unit) }} {{ demo_badge(s.is_demo) }}</div>
+            <div>{{ s.display_name }}</div>
+            <div class="mono dim small">
+              {{ s.dataset }}{% if not s.is_demo and s.sample_size %} · n = {{ '{:,}'.format(s.sample_size) }}{% endif %}
+              · as of {{ s.calculated }}
+            </div>
+            <div class="dim small">Mapping ({{ s.relationship }}): {{ s.explanation }}</div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="dim">No dataset metric is linked to this card. Its reading is symbolic only.</p>
+        {% endif %}
+      </div>
+
+      <div class="layer commentary">
+        <div class="layer-label mono">III · Oracle commentary <span class="tag fic">fiction</span></div>
+        <p><i>{{ rc.commentary }}</i></p>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+<p class="cta">
+  <a class="btn" href="{{ url_for('oracle') }}">Draw again</a>
+  <a class="btn ghost" href="{{ url_for('history') }}">My readings</a>
+  {% if is_owner %}
+  <form class="inline" method="post" action="{{ url_for('reading_delete', reading_id=reading.reading_id) }}"
+        onsubmit="return confirm('Strike this reading from the record?');">
+    <button class="btn danger" type="submit">Delete reading</button>
+  </form>
+  {% endif %}
+</p>
+<p class="mono dim small">Figures shown were frozen when the reading was drawn. Entertainment only.</p>
+{% endblock %}

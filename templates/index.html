@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card_face, window %}
+{% block title %}The Order's Portal{% endblock %}
+{% block content %}
+<div class="grid-2">
+  <div>
+    {% call window("Welcome to the Order") %}
+      <p class="lede">Welcome, traveler.</p>
+      <p>You have arrived at the official archive of the Order of the Financial Arcana.</p>
+      <p>Within these pages lie 78 archetypes governing the material, institutional, and speculative forces of modern economic life.</p>
+      <p>Consult the cards. Examine the ledger. Interpret your fate.</p>
+      <p><i>The market has already spoken.</i></p>
+      <p class="cta">
+        <a class="btn" href="{{ url_for('oracle') }}">Consult the Oracle</a>
+        <a class="btn ghost" href="{{ url_for('archive') }}">Browse the Archive</a>
+      </p>
+    {% endcall %}
+
+    {% call window("Announcements from the Order") %}
+      <ul class="plain mono">
+        <li><b>{{ today }}</b> · The Ledger has been updated. The Order takes no responsibility for what it says.</li>
+        <li><b>04/17/2003</b> · Members are reminded that capital allocation is subject to divine discretion.</li>
+        <li><b>11/02/2001</b> · The Order is proud to announce this website.</li>
+      </ul>
+    {% endcall %}
+  </div>
+
+  <div>
+    {% call window("Daily Omen") %}
+      {% if omen %}
+      <div class="omen">
+        <a href="{{ url_for('card_detail', card_id=omen.card_id) }}">{{ card_face(omen, orientation) }}</a>
+        <div>
+          <h3>{{ omen.name }}{% if orientation == 'reversed' %} <small>(reversed)</small>{% endif %}</h3>
+          <p class="mono dim">{{ omen.archetype }}</p>
+          <p>{{ omen.reversed_meaning if orientation == 'reversed' else omen.upright_meaning }}</p>
+        </div>
+      </div>
+      <p class="mono dim small">Today's omen is the same for every visitor. For a personal reading, enter the Oracle.</p>
+      {% else %}
+      <p>The deck has not been seeded. Run <code>python seed_db.py</code>.</p>
+      {% endif %}
+    {% endcall %}
+
+    {% call window("System Status") %}
+      <table class="kv mono">
+        <tr><td>Oracle</td><td>Operational</td></tr>
+        <tr><td>Member access</td><td>Granted</td></tr>
+        <tr><td>Market conditions</td><td class="warn">Unstable</td></tr>
+        <tr><td>Your financial destiny</td><td>Under maintenance</td></tr>
+      </table>
+    {% endcall %}
+  </div>
+</div>
+{% endblock %}

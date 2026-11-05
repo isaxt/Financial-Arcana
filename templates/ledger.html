@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "_macros.html" import window, demo_badge %}
+{% block title %}The Ledger{% endblock %}
+{% block head %}<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>{% endblock %}
+{% block content %}
+<h2 class="page-title">The Ledger</h2>
+<p class="intro">Figures calculated from the transaction datasets. Observed counts and calculated percentages are labelled as such.
+  The datasets are synthetic; fraud and laundering labels are dataset classifications, not proof of anything.</p>
+{% if demo.aml or demo.hist or demo.cat %}
+<p class="flash mono">▸ Some charts below show DEMO placeholder data. Run the analysis scripts, then <code>python seed_db.py</code>.</p>
+{% endif %}
+
+<h3 class="section mono">▎The Flow of Money · IBM AML</h3>
+<div class="grid-2">
+  {% call window("Flagged share by payment format") %}
+    <canvas id="chart-format" height="220"></canvas>
+    <p class="caption mono">Calculated: flagged ÷ transactions per payment format (%). {% if demo.aml %}<span class="badge demo">DEMO</span>{% endif %}</p>
+    <p class="order"><i>"Every rail leads somewhere. Some lead to a regulator."</i></p>
+  {% endcall %}
+  {% call window("Transaction amounts (log₁₀)") %}
+    <canvas id="chart-hist" height="220"></canvas>
+    <p class="caption mono">Observed counts per bin of log₁₀(amount + 1), flagged vs. not flagged. {% if demo.hist %}<span class="badge demo">DEMO</span>{% endif %}</p>
+    <p class="order"><i>"The wealthy and the suspicious share a surprising number of decimal places."</i></p>
+  {% endcall %}
+</div>
+
+<h3 class="section mono">▎The Habits of the Consumer · Transactions Fraud</h3>
+{% call window("Busiest merchant categories") %}
+  <canvas id="chart-cats" height="160"></canvas>
+  <p class="caption mono">Calculated: share of all transactions by merchant category (%). {% if demo.cat %}<span class="badge demo">DEMO</span>{% endif %}</p>
+  <p class="order"><i>"Desire, itemized."</i></p>
+{% endcall %}
+
+<h3 class="section mono">▎Metric register</h3>
+{% for ds, metrics in groups.items() %}
+<table class="ledger-table mono">
+  <caption>{{ ds.name }}</caption>
+  <thead><tr><th>Metric</th><th>Value</th><th>Sample</th><th>Unit</th></tr></thead>
+  <tbody>
+  {% for m in metrics %}
+    <tr>
+      <td><a href="{{ url_for('ledger_metric', metric_name=m.metric_name) }}">{{ m.display_name }}</a></td>
+      <td>{{ m.value|fmt_value(m.unit) }} {{ demo_badge(m.is_demo) }}</td>
+      <td>{% if m.is_demo %}n/a{% else %}{{ '{:,}'.format(m.sample_size) }}{% endif %}</td>
+      <td>{{ m.unit }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endfor %}
+{% endblock %}
+{% block scripts %}
+<script>window.LEDGER_DATA = {{ chart_data | tojson }};</script>
+<script src="{{ url_for('static', filename='js/visualizations.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from "_macros.html" import window %}
+{% block title %}The Underworld{% endblock %}
+{% block content %}
+<h2 class="page-title">The Underworld</h2>
+{% call window("ACCESS RESTRICTED") %}
+  <p class="mono">&gt; connecting to transaction explorer…<br>
+     &gt; clearance: <b>insufficient</b><br>
+     &gt; reason: <b>this section opens in Phase 04</b></p>
+  <p>The Underworld will let members search transactions, filter by amount, payment format and flagged status,
+     and follow accounts through the ledger. It is an exploratory tool, not a fraud-detection service.</p>
+  <p class="dim">Until then, the Order recommends the <a href="{{ url_for('ledger') }}">Ledger</a>.</p>
+{% endcall %}
+{% endblock %}

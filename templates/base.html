@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}The Portal{% endblock %} · The Financial Arcana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="seal" aria-hidden="true">✠</div>
+    <div>
+      <h1><a href="{{ url_for('index') }}">The Financial Arcana</a></h1>
+      <p class="tagline">Your wealth has already been written.</p>
+    </div>
+    <div class="status mono">
+      Oracle status: <b>Operational</b><br>
+      Financial Prophecy Engine v1.04
+    </div>
+  </header>
+
+  <nav class="topnav mono">
+    <a href="{{ url_for('index') }}">Portal</a>
+    <a href="{{ url_for('oracle') }}">The Oracle</a>
+    <a href="{{ url_for('archive') }}">The Archive</a>
+    <a href="{{ url_for('ledger') }}">The Ledger</a>
+    <a href="{{ url_for('underworld') }}">The Underworld</a>
+    <a href="{{ url_for('history') }}">My Readings</a>
+    <a href="{{ url_for('about') }}">About the Order</a>
+  </nav>
+
+  <div class="ticker mono" aria-hidden="true">
+    <span>SYSTEM WARNING: MARKET CONDITIONS UNSTABLE · This prophecy has been cached · Please consult your financial representative before interpreting this omen · Member access: granted ·</span>
+  </div>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}<div class="flash mono">{% for m in messages %}<p>▸ {{ m }}</p>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="mono">
+    <div class="counter">You are visitor number <b>{{ visitor_count }}</b></div>
+    <p>Last updated: 04/17/2003 · Best viewed by candlelight and a 1024 × 768 monitor.</p>
+    <p class="fine">Entertainment only. Readings are random, interpretations are fiction, and nothing here is financial advice
+      or a fraud-detection service. · IN NUMERIS, FORTUNA. · © The Order of the Financial Arcana, est. 2001</p>
+  </footer>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>
