@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import window, demo_badge %}
 {% block title %}The Ledger{% endblock %}
-{% block head %}<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>{% endblock %}
+{% block head %}<script src="{{ url_for('static', filename='js/vendor/chart.umd.js') }}"></script>{% endblock %}
 {% block content %}
 <h2 class="page-title">The Ledger</h2>
 <p class="intro">Figures calculated from the transaction datasets. Observed counts and calculated percentages are labelled as such.

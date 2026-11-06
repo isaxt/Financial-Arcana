@@ -23,9 +23,9 @@ summary files, and `seed_db.py` loads those summaries.
 |---|---|---|---|
 | **IBM AML** (Kaggle) | `data/raw/aml/` e.g. `HI-Small_Trans.csv` | `python analysis/process_aml.py` | `aml_metrics.csv`, `aml_by_payment_format.csv`, `aml_amount_histogram.csv` |
 | **Transactions Fraud** (Kaggle) | `data/raw/transactions/`: `transactions_data.csv`, `mcc_codes.json`, `train_fraud_labels.json` | `python analysis/process_transactions.py` | `consumer_metrics.csv`, `consumer_by_category.csv` |
-| **Tarot JSON** (Kaggle) | `data/raw/tarot/` | `python analysis/process_tarot.py` | `tarot_cards.json` |
+| **Tarot JSON** (Kaggle) | `data/raw/tarot/tarot-images.json` (already included) | `python analysis/process_tarot.py` | `tarot_cards.json` (already included) |
 | **FrontierFinance** (Hugging Face) | `data/raw/frontier_finance/` | not used in the MVP | |
-| **Divinatory Arts Taxonomy** (Kaggle) | `data/raw/divinatory_taxonomy/` | not used in the MVP | |
+| **Divinatory Arts Taxonomy** (Kaggle, CC BY 4.0) | `data/raw/divinatory_taxonomy/` (already included) | not used in the MVP. If you use it, credit: Galfre, A. (2026), *Contemporary Divinatory Arts Taxonomy*. | |
 
 ### Workflow for each dataset
 
@@ -78,6 +78,17 @@ draws without replacement, persistent per-browser reading history with delete, L
 metric register, About page with methodology and limitations. The Underworld is a placeholder for Phase 04.
 Cards currently render as CSS card faces; drop illustrations into `static/images/<suit>/` and set
 `cards.image_path` (for example `images/cups/ace.png`) to show them.
+
+## Card images: rights warning
+
+The card scans bundled with the Kaggle tarot dataset are the **1971 U.S. Games recolor** (marked
+"(c) 1971 U.S. Games" on the card), which is still under copyright. They are deliberately **not** included in this
+project, and `process_tarot.py` only reads the JSON. For art, use your own financial illustrations, or verified
+public-domain 1909 scans, and set `cards.image_path` (e.g. `images/cups/ace.png`, relative to `static/`).
+
+## Charts
+
+Chart.js is bundled in `static/js/vendor/`, so the Ledger works offline.
 
 ## Data caveats (also shown on the About page)
 

@@ -7,9 +7,10 @@ seed_db.py merges the result into the cards table by card name: it replaces
 the built-in traditional meaning and appends a few extra keywords. The
 financial interpretations (upright/reversed, archetype) stay authored by you.
 
-The Kaggle file's exact layout varies, so normalise() is defensive: it looks
-for a list of card objects anywhere in the JSON and tries common key names.
-If your file looks different, adjust normalise() after inspecting it.
+Written against lsind18/tarot-json (tarot-images.json, 78 cards). The
+accompanying card scans are NOT used by this project: the ones in that dataset
+are the 1971 U.S. Games recolor (marked (c) 1971), not the public-domain 1909
+originals. If your file looks different, adjust normalise() after inspecting it.
 """
 import argparse
 import json
@@ -39,24 +40,36 @@ def as_list(v):
     return v if isinstance(v, list) else [v]
 
 
+def join_meanings(items, limit=3):
+    """['Being open-minded', 'Taking a leap'] -> 'Being open-minded; taking a leap.'"""
+    parts = [str(x).strip().rstrip(".") for x in items[:limit] if str(x).strip()]
+    if not parts:
+        return ""
+    parts = [parts[0]] + [p[0].lower() + p[1:] for p in parts[1:]]
+    return "; ".join(parts) + "."
+
+
 def normalise(card):
-    suit = card.get("suit")
-    rank = card.get("rank") or card.get("value") or card.get("number")
+    """Handles the Kaggle 'tarot-images.json' layout (lsind18/tarot-json):
+    cards[] with name, number, arcana ('Major Arcana'/'Minor Arcana'),
+    suit ('Trump' for Major Arcana), keywords[], meanings{light[], shadow[]}.
+    """
     name = card.get("name")
-    if not name and suit and rank:
-        name = f"{str(rank).title()} of {str(suit).title()}"
     if not name:
         return None
+    suit = card.get("suit")
+    is_major = "major" in str(card.get("arcana", "")).lower() or str(suit).lower() == "trump"
     meanings = card.get("meanings") or {}
     light = as_list(meanings.get("light")) or as_list(card.get("meaning_up"))
     shadow = as_list(meanings.get("shadow")) or as_list(card.get("meaning_rev"))
     return dict(
         name=str(name).strip(),
-        arcana=(card.get("arcana") or ("Minor" if suit else "Major")),
-        suit=str(suit).title() if suit else None,
+        arcana="Major" if is_major else "Minor",
+        suit=None if is_major else (str(suit).title() if suit else None),
         keywords=[str(k) for k in as_list(card.get("keywords"))],
-        traditional_meaning=" ".join(str(x) for x in light[:2]),
-        traditional_reversed=" ".join(str(x) for x in shadow[:2]),
+        traditional_meaning=join_meanings(light),
+        traditional_reversed=join_meanings(shadow),
+        fortune_telling=[str(x) for x in as_list(card.get("fortune_telling"))],
     )
 
 
