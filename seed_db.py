@@ -1,10 +1,11 @@
 """Create and fill the SQLite database.
 
-    python seed_db.py            # create tables, upsert cards/metrics/spreads (keeps readings)
-    python seed_db.py --reset    # drop everything first (deletes saved readings too)
+You normally never run this by hand: the app calls seed() automatically the first
+time it starts, and `python3 arcana.py data` calls it again after processing the
+datasets. Saved readings keep the metric snapshot they were drawn with.
 
-Re-run (without --reset) after running the analysis scripts to load real metric
-values. Saved readings keep the metric snapshot they were drawn with.
+    python seed_db.py            # refresh cards/metrics/spreads (keeps readings)
+    python seed_db.py --reset    # drop everything first (deletes saved readings too)
 """
 import argparse
 import json
@@ -15,11 +16,11 @@ import pandas as pd
 from analysis.card_content import NOTES, build_cards
 from analysis.card_mapping import CARD_MAP, DATASETS, METRICS
 from analysis.demo_data import DEMO_METRIC_VALUES, DEMO_SAMPLE_SIZE
-from app import app
+from config import Config
 from models import (Card, CardMetric, Dataset, FinancialMetric, Interpretation,
                     Spread, db, utcnow)
 
-PROCESSED = app.config["DATA_PROCESSED"]
+PROCESSED = Config.DATA_PROCESSED
 
 SPREADS = [
     ("daily", "Daily Omen", 1,
@@ -147,6 +148,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--reset", action="store_true", help="drop all tables first")
     args = ap.parse_args()
+    from app import app
     with app.app_context():
         if args.reset:
             db.drop_all()

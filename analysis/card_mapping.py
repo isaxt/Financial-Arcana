@@ -53,13 +53,13 @@ METRICS = {
         description="Percentage of transactions whose 'Is Laundering' label is 1.",
         methodology="flagged rows / all rows x 100, over every row processed."),
     "aml_flagged_median_amount": dict(
-        dataset="aml", display="Median amount of flagged transactions", unit="amount",
-        description="Median 'Amount Paid' among transactions labelled as laundering (payment currency, unconverted).",
-        methodology="Median of Amount Paid over flagged rows. Mixed currencies are not converted."),
+        dataset="aml", display="Median amount of flagged transactions (USD)", unit="USD",
+        description="Median 'Amount Paid' among US-dollar transactions labelled as laundering.",
+        methodology="Median of Amount Paid over flagged rows whose Payment Currency is US Dollar. Other currencies are excluded because amounts are not converted."),
     "aml_amount_cv": dict(
         dataset="aml", display="Variation in transaction amounts (CV)", unit="ratio",
-        description="Coefficient of variation (standard deviation / mean) of 'Amount Paid'.",
-        methodology="Population std / mean of Amount Paid over all rows, from running sums."),
+        description="Coefficient of variation (standard deviation / mean) of 'Amount Paid' for US-dollar payments.",
+        methodology="Population std / mean of Amount Paid over rows whose Payment Currency is US Dollar, from running sums. Other currencies are excluded because amounts are not converted."),
     "aml_flagged_account_count": dict(
         dataset="aml", display="Originating accounts with a flagged transaction", unit="count",
         description="Number of distinct (bank, account) pairs that originated at least one flagged transaction.",

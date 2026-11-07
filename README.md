@@ -1,96 +1,72 @@
 # The Financial Arcana
 
-A satirical financial tarot oracle built with Flask, SQLite/SQLAlchemy and Pandas.
-*Your wealth has already been written.*
+A satirical financial tarot oracle (Flask, SQLite, Pandas). *Your wealth has already been written.*
 
-## Quick start
+## Run it
 
-```bash
-pip install -r requirements.txt
-python seed_db.py        # creates instance/financial_arcana.db with all 78 cards
-flask --app app run --debug      # or: python app.py
+```
+python3 arcana.py
 ```
 
-Open http://127.0.0.1:5000. The app works immediately. Until you process the real
-datasets, every statistic is a placeholder marked **DEMO** in the UI.
+(Windows: `python arcana.py`.) Or double-click **Start.command** (Mac) / **Start.bat** (Windows).
 
-## Where each dataset goes
+The first run sets everything up by itself: a private Python environment, the packages, and the
+database with all 78 cards. Then your browser opens on the site. There is nothing else to do.
+Press Ctrl+C in the window to stop it.
 
-Raw downloads never go in the database. They are processed offline into small
-summary files, and `seed_db.py` loads those summaries.
+## Load the real data (optional, one command)
 
-| Dataset | Put the downloaded file(s) in | Run | Produces (in `data/processed/`) |
-|---|---|---|---|
-| **IBM AML** (Kaggle) | `data/raw/aml/` e.g. `HI-Small_Trans.csv` | `python analysis/process_aml.py` | `aml_metrics.csv`, `aml_by_payment_format.csv`, `aml_amount_histogram.csv` |
-| **Transactions Fraud** (Kaggle) | `data/raw/transactions/`: `transactions_data.csv`, `mcc_codes.json`, `train_fraud_labels.json` | `python analysis/process_transactions.py` | `consumer_metrics.csv`, `consumer_by_category.csv` |
-| **Tarot JSON** (Kaggle) | `data/raw/tarot/tarot-images.json` (already included) | `python analysis/process_tarot.py` | `tarot_cards.json` (already included) |
-| **FrontierFinance** (Hugging Face) | `data/raw/frontier_finance/` | not used in the MVP | |
-| **Divinatory Arts Taxonomy** (Kaggle, CC BY 4.0) | `data/raw/divinatory_taxonomy/` (already included) | not used in the MVP. If you use it, credit: Galfre, A. (2026), *Contemporary Divinatory Arts Taxonomy*. | |
+```
+python3 arcana.py data
+```
 
-### Workflow for each dataset
+Or double-click **Get Real Data.command** / **Get Real Data.bat**. It finds the IBM AML and
+Transactions Fraud files (in `data/raw/`, in your kagglehub cache, or by downloading them from
+Kaggle), calculates the statistics, and refreshes the site. Until you run it, every statistic
+is a placeholder marked **DEMO**.
 
-1. **Download** it and drop the file(s) in the folder above.
-2. **Inspect** it before trusting my column assumptions:
-   `python analysis/inspect_dataset.py data/raw/aml/HI-Small_Trans.csv`
-   If a column name differs, edit the `REQUIRED` list at the top of the matching `process_*.py`.
-3. **Process** it with the script in the table. Use `--max-rows 1000000` first to test quickly.
-   The scripts read in chunks, keep only running totals, and print the metrics they calculate.
-4. **Load** the results: `python seed_db.py` (no `--reset` needed; saved readings are kept).
-   Metrics that now have real values lose their DEMO badge.
-5. Open **/ledger** to check the charts and the metric register.
+- Trial run in a couple of minutes: `python3 arcana.py data --quick`
+- Out of memory on the fraud labels: add `--skip-fraud`
+- Downloading needs a free Kaggle token. If it isn't set up, the command tells you exactly what to do.
+- Files not found automatically: `--aml-file path/to/HI-Small_Trans.csv --tx-dir path/to/folder`
 
-Tips:
-- `HI-Small_Trans.csv` (about 5M rows) is plenty for the class project. The Medium/Large variants are much bigger.
-- `train_fraud_labels.json` needs a few GB of RAM. If it struggles, run with `--skip-fraud`
-  (the fraud-rate metric then stays DEMO).
-- Fraud labels only cover part of the consumer transactions. `sample_size` for the fraud rate is the labelled count.
+If double-clicking a `.command` file is blocked on a Mac, right-click it and choose Open once,
+or just use `python3 arcana.py` in Terminal.
+
+## Other commands
+
+`python3 arcana.py reset` rebuilds the database from scratch (deletes saved readings).
+
+## Where things live
+
+```
+arcana.py            the one command (setup, start, data, reset)
+app.py  models.py    the website and its database tables
+seed_db.py           loads cards/metrics into the database (the app does this for you)
+analysis/            card text, the card-to-metric mapping, and the Pandas processing scripts
+data/raw/            optional: put downloaded datasets here instead of using the cache
+data/processed/      the small summary files the processing scripts produce
+templates/ static/   pages, styling, charts (Chart.js is bundled, so it works offline)
+```
+
+The Tarot JSON is already processed and built in. The Divinatory Arts Taxonomy and
+FrontierFinance are supporting material and are not used yet.
 
 ## How data reaches a card
 
-```
-raw CSV/JSON -> analysis/process_*.py -> data/processed/*.csv -> seed_db.py -> SQLite -> Flask
-```
+`raw datasets -> analysis/process_*.py -> data/processed/*.csv -> seed_db.py -> SQLite -> website`
 
-- `analysis/card_mapping.py` defines every metric (description + methodology) and which card cites which
-  metric (`CARD_MAP`). Edit it to change the symbolic mappings. Then re-run `python seed_db.py`.
-- `analysis/card_content.py` holds the authored text for all 78 cards.
-- When a reading is drawn, the linked metric values are **frozen** into `reading_cards.metric_snapshot`,
-  so old readings stay interpretable after you update the data.
-
-## Project layout
-
-```
-app.py              routes and reading generation
-models.py           SQLAlchemy models (cards, metrics, card_metrics, interpretations, spreads, readings, reading_cards, datasets)
-config.py           settings
-seed_db.py          creates tables and loads cards / metrics / spreads
-analysis/           card content, metric mapping, dataset processing scripts
-data/raw/           downloaded datasets (git-ignored)
-data/processed/     aggregated outputs of the analysis scripts
-instance/           SQLite database (git-ignored)
-templates/ static/  Jinja templates, CSS, JS
-```
-
-## What's in the MVP
-
-Archive with search/filter and card pages, Oracle (daily, three-card, risk, five-card), upright/reversed
-draws without replacement, persistent per-browser reading history with delete, Ledger with three charts and a
-metric register, About page with methodology and limitations. The Underworld is a placeholder for Phase 04.
-Cards currently render as CSS card faces; drop illustrations into `static/images/<suit>/` and set
-`cards.image_path` (for example `images/cups/ace.png`) to show them.
+`analysis/card_mapping.py` defines every metric and which card cites which one (a symbolic choice,
+not a finding). `analysis/card_content.py` holds the authored text for all 78 cards. When a reading is
+drawn, the metric values are frozen into it, so old readings stay readable after you update the data.
 
 ## Card images: rights warning
 
 The card scans bundled with the Kaggle tarot dataset are the **1971 U.S. Games recolor** (marked
-"(c) 1971 U.S. Games" on the card), which is still under copyright. They are deliberately **not** included in this
-project, and `process_tarot.py` only reads the JSON. For art, use your own financial illustrations, or verified
-public-domain 1909 scans, and set `cards.image_path` (e.g. `images/cups/ace.png`, relative to `static/`).
+"(c) 1971 U.S. Games"), which is still under copyright, so they are not included. Use your own
+illustrations or verified public-domain 1909 scans, and set `cards.image_path` (relative to `static/`).
 
-## Charts
-
-Chart.js is bundled in `static/js/vendor/`, so the Ledger works offline.
-
-## Data caveats (also shown on the About page)
+## Data caveats
 
 The datasets are synthetic. Fraud and laundering labels are dataset classifications, not proof of
-wrongdoing. Card-to-metric mappings are symbolic choices, not findings. Readings are entertainment.
+wrongdoing. Card-to-metric mappings are symbolic. Readings are entertainment.

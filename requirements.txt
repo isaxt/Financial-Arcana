@@ -2,5 +2,4 @@ Flask>=3.0
 Flask-SQLAlchemy>=3.1
 pandas>=2.0
 numpy>=1.26
-# optional, for the fraud-classification experiment later:
-# scikit-learn
+kagglehub>=0.3   # only used by: python3 arcana.py data

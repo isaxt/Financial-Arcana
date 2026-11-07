@@ -11,7 +11,8 @@ Expected files in data/raw/transactions/ (from the Kaggle download):
 
 Fraud labels exist only for part of the transactions, so fraud rate is
 computed over the LABELLED rows and sample_size reflects that.
-Loading the labels file needs a few GB of RAM; use --skip-fraud to omit it.
+Loading the labels file needs a few GB of RAM; if memory runs out the fraud figure is skipped
+(or pass --skip-fraud to omit it on purpose).
 
 Writes to data/processed/:
     consumer_metrics.csv      metric_name, value, unit, sample_size
@@ -21,6 +22,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
@@ -40,16 +42,12 @@ def load_labels(path):
     return s
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--file", type=Path, default=RAW / "transactions_data.csv")
-    ap.add_argument("--mcc", type=Path, default=RAW / "mcc_codes.json")
-    ap.add_argument("--labels", type=Path, default=RAW / "train_fraud_labels.json")
-    ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
-    ap.add_argument("--chunksize", type=int, default=1_000_000)
-    ap.add_argument("--max-rows", type=int, default=None)
-    ap.add_argument("--skip-fraud", action="store_true")
-    args = ap.parse_args()
+def run(file=RAW / "transactions_data.csv", mcc=RAW / "mcc_codes.json",
+        labels=RAW / "train_fraud_labels.json", out_dir=DEFAULT_OUT,
+        chunksize=1_000_000, max_rows=None, skip_fraud=False):
+    """Process the consumer transactions and write the summary files. Exits with a message on bad input."""
+    args = SimpleNamespace(file=Path(file), mcc=Path(mcc), labels=Path(labels), out_dir=Path(out_dir),
+                           chunksize=chunksize, max_rows=max_rows, skip_fraud=skip_fraud)
 
     if not args.file.exists():
         sys.exit(f"Not found: {args.file}\nPut the Kaggle files in data/raw/transactions/ (see README.md).")
@@ -61,7 +59,11 @@ def main():
     labels = None
     if not args.skip_fraud and args.labels.exists():
         print("Loading fraud labels…")
-        labels = load_labels(args.labels)
+        try:
+            labels = load_labels(args.labels)
+        except MemoryError:
+            print("Not enough memory for the fraud labels; continuing without them "
+                  "(the fraud-rate figure will stay a DEMO placeholder).")
     elif not args.skip_fraud:
         print(f"Note: {args.labels.name} not found; fraud metrics will be skipped.")
 
@@ -136,6 +138,19 @@ def main():
     cat.to_csv(args.out_dir / "consumer_by_category.csv", index=False)
     print(f"Processed {total:,} rows. Wrote 2 files to {args.out_dir}")
     print(metrics_df.to_string(index=False))
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--file", type=Path, default=RAW / "transactions_data.csv")
+    ap.add_argument("--mcc", type=Path, default=RAW / "mcc_codes.json")
+    ap.add_argument("--labels", type=Path, default=RAW / "train_fraud_labels.json")
+    ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
+    ap.add_argument("--chunksize", type=int, default=1_000_000)
+    ap.add_argument("--max-rows", type=int, default=None)
+    ap.add_argument("--skip-fraud", action="store_true")
+    a = ap.parse_args()
+    run(a.file, a.mcc, a.labels, a.out_dir, a.chunksize, a.max_rows, a.skip_fraud)
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@
 <p class="intro">Figures calculated from the transaction datasets. Observed counts and calculated percentages are labelled as such.
   The datasets are synthetic; fraud and laundering labels are dataset classifications, not proof of anything.</p>
 {% if demo.aml or demo.hist or demo.cat %}
-<p class="flash mono">▸ Some charts below show DEMO placeholder data. Run the analysis scripts, then <code>python seed_db.py</code>.</p>
+<p class="flash mono">▸ Some charts below show DEMO placeholder data. Run <code>python3 arcana.py data</code> to replace them with real numbers.</p>
 {% endif %}
 
 <h3 class="section mono">▎The Flow of Money · IBM AML</h3>
@@ -19,7 +19,7 @@
   {% endcall %}
   {% call window("Transaction amounts (log₁₀)") %}
     <canvas id="chart-hist" height="220"></canvas>
-    <p class="caption mono">Observed counts per bin of log₁₀(amount + 1), flagged vs. not flagged. {% if demo.hist %}<span class="badge demo">DEMO</span>{% endif %}</p>
+    <p class="caption mono">Observed counts per bin of log₁₀(amount + 1), flagged vs. not flagged. US-dollar payments only. {% if demo.hist %}<span class="badge demo">DEMO</span>{% endif %}</p>
     <p class="order"><i>"The wealthy and the suspicious share a surprising number of decimal places."</i></p>
   {% endcall %}
 </div>

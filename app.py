@@ -275,5 +275,17 @@ def forbidden(_e):
                            message="Member access: denied. This reading belongs to another member."), 403
 
 
+def init_db():
+    """Create the tables and load the 78-card deck the first time the app starts."""
+    from seed_db import seed
+    with app.app_context():
+        db.create_all()
+        if Card.query.count() == 0:
+            seed()
+
+
+init_db()
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5050, debug=True)   # port 5000 is taken by AirPlay on recent Macs
