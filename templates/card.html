@@ -21,8 +21,12 @@
     <p>{% for k in card.keyword_list %}<span class="chip mono">{{ k }}</span>{% endfor %}</p>
 
     <div class="layer symbolic">
-      <div class="layer-label mono">Traditional meaning</div>
-      <p>{{ card.traditional_meaning }}</p>
+      <div class="layer-label mono">Traditional meaning <span class="tag">tarot json</span></div>
+      <p><b>Upright:</b> {{ card.traditional_meaning }}</p>
+      {% if card.traditional_reversed %}<p><b>Reversed:</b> {{ card.traditional_reversed }}</p>{% endif %}
+      {% if card.tarot_archetype %}<p class="dim small">Traditional archetype: {{ card.tarot_archetype }}</p>{% endif %}
+      {% if card.symbolic_family %}<p class="dim small">Symbolic family: <b>{{ card.symbolic_family }}</b>
+        · themes: {{ card.symbolic_themes }} <span class="mono">(Galfre taxonomy, CC BY 4.0)</span></p>{% endif %}
     </div>
     <div class="layer symbolic">
       <div class="layer-label mono">Upright · financial interpretation <span class="tag">authored</span></div>
@@ -47,6 +51,13 @@
         <p class="dim">No dataset metric is linked to this card. Its meaning is symbolic only.</p>
       {% endfor %}
     </div>
+
+    {% if card.question_list %}
+    <div class="layer commentary">
+      <div class="layer-label mono">Questions to sit with <span class="tag">tarot json</span></div>
+      <ul>{% for q in card.question_list %}<li>{{ q }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
 
     {% if related %}
     <h3>Related cards</h3>

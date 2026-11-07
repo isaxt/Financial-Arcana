@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_macros.html" import window %}
+{% block title %}The Library{% endblock %}
+{% block content %}
+<h2 class="page-title">The Library</h2>
+<p class="intro">Questions that were put to financial research systems, from the FrontierFinance dataset (CC BY 4.0).
+  Each carries the use case it tests and the capabilities it demands. The Library asks what makes an answer
+  about money feel authoritative.</p>
+
+{% if total == 0 %}
+  {% call window("The shelves are empty") %}
+    <p class="mono">Run <code>python analysis/process_all.py</code> (it fetches FrontierFinance from Hugging Face's public
+      API) and restart the app.</p>
+  {% endcall %}
+{% else %}
+<form class="filters mono" method="get" action="{{ url_for('library') }}">
+  <input type="search" name="q" value="{{ f.q }}" placeholder="search the questions…">
+  <select name="use">
+    <option value="">All use cases</option>
+    {% for t in tags %}<option value="{{ t }}" {{ 'selected' if f.use == t }}>{{ t }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Search</button>
+  <a class="btn ghost" href="{{ url_for('library') }}">Reset</a>
+</form>
+<p class="mono dim small">{{ results.total }} of {{ total }} questions · page {{ results.page }} of {{ results.pages or 1 }}</p>
+
+{% for r in results.items %}
+<article class="layer symbolic">
+  <p>{{ r.query_text }}</p>
+  <p class="mono dim small">{{ r.query_date }}</p>
+  <p>{% for u in r.use_case_list %}<span class="chip mono">{{ u }}</span>{% endfor %}
+     {% for c in r.capability_list %}<span class="chip mono alt">{{ c }}</span>{% endfor %}</p>
+</article>
+{% else %}
+<p>The Library has no record matching that query.</p>
+{% endfor %}
+
+{% if results.pages > 1 %}
+<p class="pager mono">
+  {% if results.has_prev %}<a href="{{ url_for('library', page=results.prev_num, **f) }}">◂ previous</a>{% endif %}
+  <span>page {{ results.page }} / {{ results.pages }}</span>
+  {% if results.has_next %}<a href="{{ url_for('library', page=results.next_num, **f) }}">next ▸</a>{% endif %}
+</p>
+{% endif %}
+{% endif %}
+{% endblock %}

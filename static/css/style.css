@@ -166,3 +166,11 @@ footer p { margin: 4px 0; }
 .fine { font-size: 11px; max-width: 780px; margin: 6px auto; }
 .omen { display: flex; gap: 16px; align-items: flex-start; }
 .omen h3 { font-size: 1.5rem; margin-top: 0; }
+
+/* pagination, explorer rows, glossary, extra chips */
+.pager { display: flex; gap: 18px; justify-content: center; align-items: center; margin: 14px 0; }
+tr.flagged td { background: rgba(100, 46, 66, .28); }
+.chip.alt { border-color: var(--blue); color: var(--blue); }
+.glossary { margin: 0 0 18px; }
+.glossary dt { color: var(--gold); font-weight: 600; margin-top: 10px; }
+.glossary dd { margin: 2px 0 0 18px; }

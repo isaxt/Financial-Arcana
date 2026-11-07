@@ -1,72 +1,52 @@
 # The Financial Arcana
 
-A satirical financial tarot oracle (Flask, SQLite, Pandas). *Your wealth has already been written.*
+A satirical financial tarot oracle (Flask · SQLite · Pandas · Jinja · Chart.js).
 
 ## Run it
 
 ```
-python3 arcana.py
+pip install -r requirements.txt
+python app.py
 ```
 
-(Windows: `python arcana.py`.) Or double-click **Start.command** (Mac) / **Start.bat** (Windows).
+Open http://127.0.0.1:5050. The database is created and filled automatically the first time.
+(Optional: use a virtual environment first: `python -m venv .venv`, then activate it.)
 
-The first run sets everything up by itself: a private Python environment, the packages, and the
-database with all 78 cards. Then your browser opens on the site. There is nothing else to do.
-Press Ctrl+C in the window to stop it.
+Out of the box the 78 cards, tarot text and the taxonomy pages work. The charts and explorers show
+clearly labelled DEMO placeholders until you process the real datasets.
 
-## Load the real data (optional, one command)
+## Use the real datasets
 
-```
-python3 arcana.py data
-```
+1. Put the files where the table says (or skip this: AML and Transactions are also found automatically
+   in your `~/.cache/kagglehub` download folder).
+2. Run `python analysis/process_all.py` (add `--max-rows 1000000` for a quick trial), then restart `python app.py`.
 
-Or double-click **Get Real Data.command** / **Get Real Data.bat**. It finds the IBM AML and
-Transactions Fraud files (in `data/raw/`, in your kagglehub cache, or by downloading them from
-Kaggle), calculates the statistics, and refreshes the site. Until you run it, every statistic
-is a placeholder marked **DEMO**.
+| Dataset | Put it in | Used for |
+|---|---|---|
+| IBM AML (`HI-Small_Trans.csv`) | `data/raw/aml/` | Ledger charts, card metrics, The Underworld |
+| Transactions Fraud (`transactions_data.csv`, `mcc_codes.json`, `train_fraud_labels.json`) | `data/raw/transactions/` | Ledger charts, card metrics |
+| FrontierFinance | `data/raw/frontier_finance/` (or fetched automatically from Hugging Face) | The Library, 2 card metrics |
+| Tarot JSON | `data/raw/tarot/` (included) | Traditional meanings and questions on every card |
+| Divinatory Arts Taxonomy | `data/raw/divinatory_taxonomy/` (included) | The Lexicon, symbolic families, About page |
 
-- Trial run in a couple of minutes: `python3 arcana.py data --quick`
-- Out of memory on the fraud labels: add `--skip-fraud`
-- Downloading needs a free Kaggle token. If it isn't set up, the command tells you exactly what to do.
-- Files not found automatically: `--aml-file path/to/HI-Small_Trans.csv --tx-dir path/to/folder`
+Each dataset is optional; a missing one is skipped.
 
-If double-clicking a `.command` file is blocked on a Mac, right-click it and choose Open once,
-or just use `python3 arcana.py` in Terminal.
-
-## Other commands
-
-`python3 arcana.py reset` rebuilds the database from scratch (deletes saved readings).
-
-## Where things live
+## Where things are
 
 ```
-arcana.py            the one command (setup, start, data, reset)
-app.py  models.py    the website and its database tables
-seed_db.py           loads cards/metrics into the database (the app does this for you)
-analysis/            card text, the card-to-metric mapping, and the Pandas processing scripts
-data/raw/            optional: put downloaded datasets here instead of using the cache
-data/processed/      the small summary files the processing scripts produce
-templates/ static/   pages, styling, charts (Chart.js is bundled, so it works offline)
+app.py            routes            models.py / seed_db.py   database + loading
+config.py         settings          analysis/                dataset processing + card text
+templates/        Jinja pages       static/css, static/js    your visual layer
+data/raw/         source files      data/processed/          small computed files the app reads
 ```
 
-The Tarot JSON is already processed and built in. The Divinatory Arts Taxonomy and
-FrontierFinance are supporting material and are not used yet.
+Start the visual work in `templates/base.html`, `static/css/style.css` and `static/js/visualizations.js`.
+To reset everything, delete `instance/financial_arcana.db` and restart.
 
-## How data reaches a card
+## Notes
 
-`raw datasets -> analysis/process_*.py -> data/processed/*.csv -> seed_db.py -> SQLite -> website`
-
-`analysis/card_mapping.py` defines every metric and which card cites which one (a symbolic choice,
-not a finding). `analysis/card_content.py` holds the authored text for all 78 cards. When a reading is
-drawn, the metric values are frozen into it, so old readings stay readable after you update the data.
-
-## Card images: rights warning
-
-The card scans bundled with the Kaggle tarot dataset are the **1971 U.S. Games recolor** (marked
-"(c) 1971 U.S. Games"), which is still under copyright, so they are not included. Use your own
-illustrations or verified public-domain 1909 scans, and set `cards.image_path` (relative to `static/`).
-
-## Data caveats
-
-The datasets are synthetic. Fraud and laundering labels are dataset classifications, not proof of
-wrongdoing. Card-to-metric mappings are symbolic. Readings are entertainment.
+- The tarot dataset's card images are © 1971 U.S. Games Systems and are not included. Use your own or public-domain art.
+- Taxonomy and FrontierFinance are CC BY 4.0; attribution is on the About page.
+- The transaction datasets are synthetic. Labels are the datasets' classifications, not proof of anything.
+- The Underworld uses a sample (all flagged rows up to a cap, plus random others); its flagged share is not the real rate.
+- AML amount statistics use US-dollar payments only (currencies are not converted).

@@ -30,9 +30,33 @@
 
 {% call window("Data sources") %}
   <ul>
-    {% for d in datasets %}<li><a href="{{ d.source_url }}">{{ d.name }}</a> <span class="dim">· {{ d.processing_notes }}</span></li>{% endfor %}
+    {% for d in datasets %}<li><a href="{{ d.source_url }}">{{ d.name }}</a>
+      <span class="dim">· {{ d.processing_notes }} <i>License: {{ d.license }}</i></span></li>{% endfor %}
   </ul>
 {% endcall %}
+
+{% if boundaries %}
+{% call window("What a responsible reader declines to divine") %}
+  <p>The Divinatory Arts Taxonomy lists topics where a responsible practitioner will not answer, or will refer the
+     person elsewhere. The Order, being a parody, declines them too.</p>
+  <table class="ledger-table mono">
+    <thead><tr><th>Topic</th><th>Guiding principle</th></tr></thead>
+    <tbody>{% for b in boundaries %}<tr><td>{{ b.title }}</td><td>{{ b.body }}</td></tr>{% endfor %}</tbody>
+  </table>
+  <p class="dim small">Labels translated from the French original by this project. Source: Galfre, A. (2026), Contemporary Divinatory Arts Taxonomy, CC BY 4.0.</p>
+{% endcall %}
+{% endif %}
+
+{% if trust %}
+{% call window("Signals of trustworthiness") %}
+  <p>The same taxonomy lists signals that make an online divinatory practice more trustworthy.
+     The Order has reviewed the list and reports no comment.</p>
+  <table class="ledger-table mono">
+    <thead><tr><th>Category</th><th>Signal</th><th>How checkable</th></tr></thead>
+    <tbody>{% for t in trust %}<tr><td>{{ t.category }}</td><td>{{ t.title }}</td><td>{{ t.body }}</td></tr>{% endfor %}</tbody>
+  </table>
+{% endcall %}
+{% endif %}
 
 {% call window("Limitations & disclaimer") %}
   <ul>

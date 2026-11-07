@@ -17,9 +17,11 @@ Loading the labels file needs a few GB of RAM; if memory runs out the fraud figu
 Writes to data/processed/:
     consumer_metrics.csv      metric_name, value, unit, sample_size
     consumer_by_category.csv  category, count, share_pct, labeled, fraud, fraud_rate_pct
+    consumer_users_hist.csv   bucket, users  (transactions per client)
 """
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -42,10 +44,24 @@ def load_labels(path):
     return s
 
 
-def run(file=RAW / "transactions_data.csv", mcc=RAW / "mcc_codes.json",
-        labels=RAW / "train_fraud_labels.json", out_dir=DEFAULT_OUT,
+def find_folder():
+    """data/raw/transactions/ if it holds the data, else your newest kagglehub download."""
+    if (RAW / "transactions_data.csv").exists():
+        return RAW
+    cache = Path(os.environ.get("KAGGLEHUB_CACHE", Path.home() / ".cache" / "kagglehub"))
+    versions = cache / "datasets" / "computingvictor" / "transactions-fraud-datasets" / "versions"
+    cached = sorted((p.parent for p in versions.glob("*/transactions_data.csv")),
+                    key=lambda p: int(p.name) if p.name.isdigit() else 0)
+    return cached[-1] if cached else RAW
+
+
+def run(file=None, mcc=None, labels=None, out_dir=DEFAULT_OUT,
         chunksize=1_000_000, max_rows=None, skip_fraud=False):
     """Process the consumer transactions and write the summary files. Exits with a message on bad input."""
+    folder = find_folder()
+    file = file or folder / "transactions_data.csv"
+    mcc = mcc or folder / "mcc_codes.json"
+    labels = labels or folder / "train_fraud_labels.json"
     args = SimpleNamespace(file=Path(file), mcc=Path(mcc), labels=Path(labels), out_dir=Path(out_dir),
                            chunksize=chunksize, max_rows=max_rows, skip_fraud=skip_fraud)
 
@@ -133,18 +149,26 @@ def run(file=RAW / "transactions_data.csv", mcc=RAW / "mcc_codes.json",
     cat["fraud_rate_pct"] = np.where(cat["labeled"] > 0, cat["fraud"] / cat["labeled"].where(cat["labeled"] > 0) * 100, np.nan)
     cat = cat.sort_values("count", ascending=False)[["category", "count", "share_pct", "labeled", "fraud", "fraud_rate_pct"]]
 
+    # How many transactions each client made, in roughly log-spaced buckets
+    counts = user_counts.to_numpy().astype("int64")
+    edges = np.unique(np.round(np.geomspace(1, counts.max() + 1, 13)).astype("int64"))
+    users, _ = np.histogram(counts, bins=edges)
+    users_hist = pd.DataFrame({"bucket": [f"{edges[i]:,}-{edges[i + 1] - 1:,}" for i in range(len(edges) - 1)],
+                               "users": users})
+
     args.out_dir.mkdir(parents=True, exist_ok=True)
+    users_hist.to_csv(args.out_dir / "consumer_users_hist.csv", index=False)
     metrics_df.to_csv(args.out_dir / "consumer_metrics.csv", index=False)
     cat.to_csv(args.out_dir / "consumer_by_category.csv", index=False)
-    print(f"Processed {total:,} rows. Wrote 2 files to {args.out_dir}")
+    print(f"Processed {total:,} rows. Wrote 3 files to {args.out_dir}")
     print(metrics_df.to_string(index=False))
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--file", type=Path, default=RAW / "transactions_data.csv")
-    ap.add_argument("--mcc", type=Path, default=RAW / "mcc_codes.json")
-    ap.add_argument("--labels", type=Path, default=RAW / "train_fraud_labels.json")
+    ap.add_argument("--file", type=Path, default=None)
+    ap.add_argument("--mcc", type=Path, default=None)
+    ap.add_argument("--labels", type=Path, default=None)
     ap.add_argument("--out-dir", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--chunksize", type=int, default=1_000_000)
     ap.add_argument("--max-rows", type=int, default=None)

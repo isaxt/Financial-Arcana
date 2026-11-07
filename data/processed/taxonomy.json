@@ -1,0 +1,781 @@
+{
+  "major": [
+    {
+      "name": "The Fool",
+      "family": "Transition / Departure",
+      "themes": "new beginning; impulse; spontaneity; threshold"
+    },
+    {
+      "name": "The Magician",
+      "family": "Initiative / Potential",
+      "themes": "initiative; skill; resources; beginning"
+    },
+    {
+      "name": "The High Priestess",
+      "family": "Interior Knowledge / Study",
+      "themes": "intuition; silence; maturation; inner knowledge"
+    },
+    {
+      "name": "The Empress",
+      "family": "Expression / Fertility",
+      "themes": "creativity; expression; growth; communication"
+    },
+    {
+      "name": "The Emperor",
+      "family": "Structure / Authority",
+      "themes": "framework; stability; authority; construction"
+    },
+    {
+      "name": "The Hierophant",
+      "family": "Transmission / Values",
+      "themes": "transmission; counsel; tradition; values"
+    },
+    {
+      "name": "The Lovers",
+      "family": "Choice / Relationship",
+      "themes": "choice; relationship; attraction; dilemma"
+    },
+    {
+      "name": "The Chariot",
+      "family": "Direction / Momentum",
+      "themes": "progress; willpower; movement; mastery"
+    },
+    {
+      "name": "Justice",
+      "family": "Balance / Accountability",
+      "themes": "balance; accountability; decision; truth"
+    },
+    {
+      "name": "The Hermit",
+      "family": "Reflection / Time",
+      "themes": "withdrawal; introspection; patience; search"
+    },
+    {
+      "name": "Wheel of Fortune",
+      "family": "Cycles / Change",
+      "themes": "cycle; change; opportunity; unpredictability"
+    },
+    {
+      "name": "Strength",
+      "family": "Mastery / Courage",
+      "themes": "courage; mastery; gentleness; inner energy"
+    },
+    {
+      "name": "The Hanged Man",
+      "family": "Suspension / Reframing",
+      "themes": "suspension; letting go; new perspective; waiting"
+    },
+    {
+      "name": "Death",
+      "family": "Transformation / Ending",
+      "themes": "ending; transformation; rupture; shedding"
+    },
+    {
+      "name": "Temperance",
+      "family": "Integration / Balance",
+      "themes": "balance; integration; rhythm; dialogue"
+    },
+    {
+      "name": "The Devil",
+      "family": "Attachment / Shadow",
+      "themes": "attachment; desire; dependency; power"
+    },
+    {
+      "name": "The Tower",
+      "family": "Disruption / Release",
+      "themes": "disruption; revelation; collapse; release"
+    },
+    {
+      "name": "The Star",
+      "family": "Hope / Alignment",
+      "themes": "hope; inspiration; trust; soothing"
+    },
+    {
+      "name": "The Moon",
+      "family": "Ambiguity / Imagination",
+      "themes": "ambiguity; imagination; fear; nocturnal intuition"
+    },
+    {
+      "name": "The Sun",
+      "family": "Clarity / Vitality",
+      "themes": "clarity; joy; recognition; vitality"
+    },
+    {
+      "name": "Judgement",
+      "family": "Awakening / Reassessment",
+      "themes": "calling; assessment; revelation; rebirth"
+    },
+    {
+      "name": "The World",
+      "family": "Completion / Integration",
+      "themes": "completion; integration; openness; achievement"
+    }
+  ],
+  "entries": [
+    {
+      "kind": "lexicon",
+      "category": "Field",
+      "title": "Divinatory arts",
+      "body": "A broad set of interpretive practices using intuition, symbols, tools or perceptions within a clarification-oriented context.",
+      "note": "General practice"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Practice",
+      "title": "Clairvoyance",
+      "body": "An intuitive practice aimed at perceiving dynamics, tendencies or symbolic information around a situation.",
+      "note": "Intuitive perception"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Perception",
+      "title": "Claircognition",
+      "body": "A form of intuitive perception associated with sudden knowing without apparent conscious reasoning.",
+      "note": "Clair abilities"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Perception",
+      "title": "Clairsentience",
+      "body": "Intuitive perception experienced through sensations, emotions or bodily impressions.",
+      "note": "Clair abilities"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Practice",
+      "title": "Intuitive mediumship",
+      "body": "An intuitive practice centered on subtle, symbolic or relational perceptions without claiming absolute proof.",
+      "note": "Intuitive practice"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Symbolic system",
+      "title": "Tarot",
+      "body": "A card system structured around archetypes, images and interpretive sequences.",
+      "note": "Cards"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Symbolic system",
+      "title": "Cartomancy",
+      "body": "Interpretive card reading using traditional or contemporary decks for clarification.",
+      "note": "Cards"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Symbolic system",
+      "title": "Oracle deck",
+      "body": "A deck or symbolic tool not necessarily tied to tarot structure.",
+      "note": "Cards"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Method",
+      "title": "Spread",
+      "body": "An organized layout of cards or signs used to structure interpretation.",
+      "note": "Reading structure"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Symbolic system",
+      "title": "Major arcana",
+      "body": "A tarot card associated with a major archetype or symbolic dynamic.",
+      "note": "Tarot structure"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Symbolic system",
+      "title": "Minor arcana",
+      "body": "A tarot card associated with concrete situations, nuances or daily dynamics.",
+      "note": "Tarot structure"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Concept",
+      "title": "Symbolism",
+      "body": "A system of signs, images or correspondences used to develop meaning.",
+      "note": "Interpretation"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Concept",
+      "title": "Archetype",
+      "body": "A recurring symbolic form used as an interpretive or representational model.",
+      "note": "Symbolic structure"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Method",
+      "title": "Symbolic interpretation",
+      "body": "Reading of signs or tools aimed at producing contextualized understanding.",
+      "note": "Interpretive process"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Practice",
+      "title": "Divinatory consultation",
+      "body": "A structured session around a request, an ethical frame and an intuitive or symbolic interpretation.",
+      "note": "Client interaction"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Actor",
+      "title": "Client / querent",
+      "body": "The person requesting a reading or clarification in a consultation context.",
+      "note": "Consultation"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Ethics",
+      "title": "Free will",
+      "body": "The principle that the client retains responsibility and decision-making autonomy.",
+      "note": "Autonomy"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Ethics",
+      "title": "Professional responsibility",
+      "body": "The duty to set boundaries, clarify the framework and prevent abuse.",
+      "note": "Professional conduct"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Ethics",
+      "title": "Professional ethics",
+      "body": "A set of principles framing responsible, transparent and non-manipulative practice.",
+      "note": "Rules and boundaries"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Ethics",
+      "title": "Transparency",
+      "body": "Clarity about identity, prices, limits, conditions and consultation method.",
+      "note": "Trust"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Digital context",
+      "title": "Digital trust",
+      "body": "Public signals used to assess the reliability of an online professional.",
+      "note": "Trust signals"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Digital context",
+      "title": "Verified review",
+      "body": "A public review associated with an identifiable collection or verification process.",
+      "note": "Reputation"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Digital context",
+      "title": "Digital reputation",
+      "body": "Public image built through reviews, publications, profiles, links, evidence and editorial consistency.",
+      "note": "Authority"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Concept",
+      "title": "Uncertainty",
+      "body": "A situation where available information does not allow certainty in decision-making.",
+      "note": "Decision context"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Concept",
+      "title": "Decision-making",
+      "body": "Process through which a person evaluates options and chooses a direction.",
+      "note": "Decision context"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Consultation function",
+      "title": "Clarification",
+      "body": "A process making a situation more readable by distinguishing issues, options and dynamics.",
+      "note": "Interpretive outcome"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Consultation function",
+      "title": "Reframing",
+      "body": "Transforming a confused request into a clearer and more actionable formulation.",
+      "note": "Language"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Ethics",
+      "title": "Open temporality",
+      "body": "A way of speaking about the future as evolving dynamics rather than closed certainty.",
+      "note": "Prediction"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Consultation function",
+      "title": "Action scenario",
+      "body": "A cautious projection of possible paths based on an observed dynamic.",
+      "note": "Decision context"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Risk",
+      "title": "Consultative dependency",
+      "body": "A situation where a person consults repeatedly to the point of losing autonomy or perspective.",
+      "note": "Ethical risk"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Risk",
+      "title": "Abusive promise",
+      "body": "A commercial or predictive claim exploiting hope, fear or vulnerability.",
+      "note": "Commercial risk"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Ethics",
+      "title": "Excluded topic",
+      "body": "A domain refused by the practitioner for ethical or legal reasons.",
+      "note": "Professional boundary"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Ethics",
+      "title": "Confidentiality",
+      "body": "Protection of information shared during a consultation.",
+      "note": "Privacy"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Data practice",
+      "title": "Anonymization",
+      "body": "A process aiming to make personal identification impossible within data or examples.",
+      "note": "Privacy"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Data practice",
+      "title": "Sensitive data",
+      "body": "Personal information whose use may expose someone to particular risk.",
+      "note": "Privacy"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Data practice",
+      "title": "Metadata",
+      "body": "Information describing a resource, document, person, publication or dataset.",
+      "note": "Structured data"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Digital context",
+      "title": "Schema.org",
+      "body": "A structured markup vocabulary used to describe entities on the web.",
+      "note": "Structured data"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Digital identity",
+      "title": "ORCID",
+      "body": "A persistent identifier linking an author or researcher to their works.",
+      "note": "Research profile"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Publication type",
+      "title": "Working paper",
+      "body": "A working document shared before formal publication or within an independent framework.",
+      "note": "Research output"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Data practice",
+      "title": "Structured data",
+      "body": "Data organized through explicit columns, categories or relations.",
+      "note": "Data organization"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Data practice",
+      "title": "Taxonomy",
+      "body": "An organized classification of terms, categories and conceptual relations.",
+      "note": "Classification"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Concept",
+      "title": "Interpretive bias",
+      "body": "A tendency to steer interpretation according to expectations, beliefs or emotional context.",
+      "note": "Cognition"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Concept",
+      "title": "Projection",
+      "body": "Attribution of personal content to a symbol, situation or another person.",
+      "note": "Cognition"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Concept",
+      "title": "Personal narrative",
+      "body": "The way a person organizes lived experience into a coherent or meaningful story.",
+      "note": "Narrative process"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Consultation context",
+      "title": "Life transition",
+      "body": "A period of relational, professional, family or personal change.",
+      "note": "Client situation"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Method",
+      "title": "Open question",
+      "body": "A formulation allowing multiple answers, nuances or paths.",
+      "note": "Consultation framing"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Risk",
+      "title": "Intrusive third-party question",
+      "body": "A request about the intimate or private life of an absent third party without ethical necessity.",
+      "note": "Privacy risk"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Digital context",
+      "title": "Remote consultation",
+      "body": "A consultation performed by phone, video, chat or another digital channel.",
+      "note": "Service format"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Digital context",
+      "title": "Digital divination tool",
+      "body": "A widget, app or interactive tool offering a spread, calculation or symbolic content.",
+      "note": "Digital tool"
+    },
+    {
+      "kind": "lexicon",
+      "category": "Digital context",
+      "title": "Traceability",
+      "body": "The ability to link information to its source, date, author or publication context.",
+      "note": "Trust"
+    },
+    {
+      "kind": "trust",
+      "category": "Identity",
+      "title": "Name, role, background and responsibility clearly associated with the practice.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Identity",
+      "title": "Clear general location or professional address.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Legal transparency",
+      "title": "Legal information available on the official website.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Commercial transparency",
+      "title": "Prices clearly shown before booking or payment.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Service clarity",
+      "title": "Terms, duration, channel, payment and limits explained.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Ethics",
+      "title": "Accessible principles, exclusions and professional boundaries.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Privacy",
+      "title": "Explanation of personal data collection and use.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Reputation",
+      "title": "Client feedback collected through an identifiable mechanism.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Reputation",
+      "title": "Public replies that are sober, respectful and professional.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Authority",
+      "title": "Certifications or memberships shown with organizations and dates.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Authority",
+      "title": "Documents, articles, guides or working papers linked to an author.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Authority",
+      "title": "Persistent identifier linking an author to her works.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Digital transparency",
+      "title": "Code, plugin or technical resources published with history.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Author graph",
+      "title": "Biography, role, publications and responsibilities centralized.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Commercial ethics",
+      "title": "No repeated pressure after consultation or inquiry.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Digital clarity",
+      "title": "Clear separation between playful tool, automated content and human consultation.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "UX",
+      "title": "Readability, navigation, contrast and access to essential information.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "UX / conversion",
+      "title": "Schedule, duration, price and consultation mode understandable before confirmation.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Technical trust",
+      "title": "HTTPS, maintenance, updates and coherent security practices.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Entity consistency",
+      "title": "Same name, role, links and general description across key profiles.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Research transparency",
+      "title": "Sources, references or resources listed in long-form documents.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Traceability",
+      "title": "Year, version and context provided for publications or datasets.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Ethics",
+      "title": "Public formulation of excluded topics and outcome limits.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Ethics",
+      "title": "Communication avoiding guarantees, total certainty and fear tactics.",
+      "body": "High",
+      "note": ""
+    },
+    {
+      "kind": "trust",
+      "category": "Digital transparency",
+      "title": "Widgets, apps or plugins linked to an author, a version and a source page.",
+      "body": "Medium",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Health",
+      "body": "no substitute for medical advice",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Death",
+      "body": "emotional protection",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Minors",
+      "body": "protection of minors",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Legal matters",
+      "body": "no substitute for legal advice",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Finance",
+      "body": "the client stays responsible for their decisions",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Dependence on consultations",
+      "body": "preventing dependence",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Winning an ex back",
+      "body": "free will",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Controlling other people",
+      "body": "respect for others",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Intrusive questions about a third party",
+      "body": "confidentiality and respect for third parties",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Coercive occultism",
+      "body": "no coercion",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Emotional emergencies",
+      "body": "protection of vulnerable people",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Pregnancy",
+      "body": "no substitute for medical advice",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Paternity",
+      "body": "no substitute for biological or legal findings",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Career direction",
+      "body": "the client stays responsible for their decisions",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Addictions",
+      "body": "no substitute for therapy",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Violence",
+      "body": "safety and protection",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Bereavement",
+      "body": "respect for grief",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Pricing",
+      "body": "price transparency",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "Personal data",
+      "body": "confidentiality",
+      "note": ""
+    },
+    {
+      "kind": "boundary",
+      "category": "",
+      "title": "AI and automation",
+      "body": "transparency about technology",
+      "note": ""
+    }
+  ]
+}

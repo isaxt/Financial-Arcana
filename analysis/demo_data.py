@@ -17,6 +17,8 @@ DEMO_METRIC_VALUES = {
     "consumer_median_amount": 28.0,
     "consumer_amount_cv": 1.8,
     "consumer_fraud_rate": 0.15,
+    "frontier_query_count": 220.0,
+    "frontier_top_use_case_share": 25.0,
 }
 
 DEMO_SAMPLE_SIZE = 0
@@ -37,11 +39,19 @@ DEMO_CHARTS = {
                         (8, 30, 0)]
     ],
     "consumer_by_category": [
-        {"category": "Grocery Stores", "count": 1200, "share_pct": 12.0, "fraud_rate_pct": 0.1},
-        {"category": "Eating Places", "count": 1100, "share_pct": 11.0, "fraud_rate_pct": 0.2},
-        {"category": "Service Stations", "count": 900, "share_pct": 9.0, "fraud_rate_pct": 0.1},
-        {"category": "Drug Stores", "count": 700, "share_pct": 7.0, "fraud_rate_pct": 0.1},
-        {"category": "Department Stores", "count": 600, "share_pct": 6.0, "fraud_rate_pct": 0.3},
-        {"category": "Online Retail", "count": 500, "share_pct": 5.0, "fraud_rate_pct": 0.9},
+        {"category": "Grocery Stores", "count": 1200, "share_pct": 12.0, "labeled": 600, "fraud_rate_pct": 0.1},
+        {"category": "Eating Places", "count": 1100, "share_pct": 11.0, "labeled": 550, "fraud_rate_pct": 0.2},
+        {"category": "Service Stations", "count": 900, "share_pct": 9.0, "labeled": 450, "fraud_rate_pct": 0.1},
+        {"category": "Drug Stores", "count": 700, "share_pct": 7.0, "labeled": 350, "fraud_rate_pct": 0.1},
+        {"category": "Department Stores", "count": 600, "share_pct": 6.0, "labeled": 300, "fraud_rate_pct": 0.3},
+        {"category": "Online Retail", "count": 500, "share_pct": 5.0, "labeled": 250, "fraud_rate_pct": 0.9},
+    ],
+    "aml_daily": [
+        {"date": f"2022/09/{d:02d}", "count": c, "flagged": f}
+        for d, c, f in [(1, 900, 1), (2, 1100, 2), (3, 1000, 1), (4, 700, 0), (5, 650, 1), (6, 1200, 3), (7, 1300, 2)]
+    ],
+    "consumer_users_hist": [
+        {"bucket": b, "users": u}
+        for b, u in [("1-9", 10), ("10-99", 60), ("100-999", 400), ("1,000-9,999", 1300), ("10,000+", 230)]
     ],
 }

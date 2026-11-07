@@ -12,9 +12,13 @@
     <tr>
       <td>{{ '%05d' % r.reading_id }}</td>
       <td>{{ r.created_at.strftime('%m/%d/%Y %H:%M') }}</td>
-      <td><a href="{{ url_for('reading', reading_id=r.reading_id) }}">{{ r.title }}</a></td>
+      <td>{{ '★ ' if r.is_favorite }}<a href="{{ url_for('reading', reading_id=r.reading_id) }}">{{ r.title }}</a></td>
       <td>{{ r.cards | map(attribute='card.name') | join(', ') }}</td>
       <td>
+        <form class="inline" method="post" action="{{ url_for('reading_favorite', reading_id=r.reading_id) }}">
+          <input type="hidden" name="back" value="history">
+          <button class="btn ghost tiny" type="submit">{{ 'Unstar' if r.is_favorite else 'Star' }}</button>
+        </form>
         <form class="inline" method="post" action="{{ url_for('reading_delete', reading_id=r.reading_id) }}"
               onsubmit="return confirm('Strike this reading from the record?');">
           <button class="btn danger tiny" type="submit">Delete</button>

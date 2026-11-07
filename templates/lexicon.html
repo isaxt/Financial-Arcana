@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "_macros.html" import window %}
+{% block title %}The Lexicon{% endblock %}
+{% block content %}
+<h2 class="page-title">The Lexicon</h2>
+<p class="intro">The vocabulary of divination, from the Contemporary Divinatory Arts Taxonomy by Arianne Galfre (CC BY 4.0).
+  A reminder that, like financial forecasting, it is a vocabulary for talking about uncertainty.</p>
+
+{% if total == 0 %}
+  {% call window("The Lexicon is closed") %}
+    <p class="mono">Run <code>python analysis/process_all.py</code> and restart the app.</p>
+  {% endcall %}
+{% else %}
+<form class="filters mono" method="get" action="{{ url_for('lexicon') }}">
+  <input type="search" name="q" value="{{ q }}" placeholder="search the lexicon…">
+  <button class="btn" type="submit">Search</button>
+  <a class="btn ghost" href="{{ url_for('lexicon') }}">Reset</a>
+</form>
+{% for category, entries in groups.items() %}
+  <h3 class="section mono">▎{{ category }}</h3>
+  <dl class="glossary">
+    {% for e in entries %}<dt>{{ e.title }}</dt><dd>{{ e.body }}{% if e.note %} <span class="dim mono small">· {{ e.note }}</span>{% endif %}</dd>{% endfor %}
+  </dl>
+{% else %}
+  <p>The Lexicon has no entry matching that query.</p>
+{% endfor %}
+{% endif %}
+{% endblock %}

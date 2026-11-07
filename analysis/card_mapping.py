@@ -28,21 +28,21 @@ DATASETS = {
         source_url="https://www.kaggle.com/datasets/lsind18/tarot-json",
         description="Traditional meanings and keywords for the 78 tarot cards.",
         license="See the Kaggle dataset page for license terms.",
-        notes="Normalised by analysis/process_tarot.py and merged into the cards table by seed_db.py.",
+        notes="Traditional meanings, reversed meanings, keywords, archetype names and reflective questions for every card.",
     ),
     "frontier": dict(
         name="FrontierFinance",
         source_url="https://huggingface.co/datasets/samaya-ai/FrontierFinance",
-        description="Financial research questions and evaluations. Supporting material, not part of the metric engine.",
-        license="See the Hugging Face dataset page for license terms.",
-        notes="Not used in the MVP.",
+        description="Financial research queries with the use cases and capabilities they test. Supporting material, not part of the transaction-analysis engine.",
+        license="CC BY 4.0",
+        notes="Powers the Library page (the questions put to financial research systems).",
     ),
     "divinatory": dict(
         name="Contemporary Divinatory Arts Taxonomy",
         source_url="https://www.kaggle.com/datasets/ariannegalfreagv/contemporary-divinatory-arts-taxonomy",
-        description="Taxonomy of divinatory practices. Supporting research for the project framing.",
-        license="See the Kaggle dataset page for license terms.",
-        notes="Not used in the MVP.",
+        description="Bilingual taxonomy of divinatory practice: symbols, terms, ethical boundaries and trust signals. Supporting research for the project framing.",
+        license="CC BY 4.0. Adapted from Arianne Galfre, Contemporary Divinatory Arts Taxonomy (2026). Only the English fields are shown; a few French labels were translated by this project.",
+        notes="Symbolic families on Major Arcana pages, the Lexicon, and the ethical boundaries and trust signals on the About page.",
     ),
 }
 
@@ -88,6 +88,14 @@ METRICS = {
         dataset="consumer", display="Share of labelled transactions flagged as fraud", unit="%",
         description="Percentage of LABELLED transactions whose fraud label is 'Yes'.",
         methodology="Fraud 'Yes' / labelled transactions x 100. Unlabelled rows are excluded."),
+    "frontier_query_count": dict(
+        dataset="frontier", display="Financial research queries in FrontierFinance", unit="count",
+        description="Number of research queries in the FrontierFinance dataset.",
+        methodology="Row count of the dataset's train split."),
+    "frontier_top_use_case_share": dict(
+        dataset="frontier", display="Share of queries tagged with the most common use case", unit="%",
+        description="Percentage of FrontierFinance queries that carry the single most common use-case tag.",
+        methodology="Queries containing the most frequent use_cases tag / all queries x 100. A query can carry several tags."),
 }
 
 # (card name, metric_name, relationship, explanation)
@@ -114,4 +122,8 @@ CARD_MAP = [
      "Where spending concentrates, attachment lives."),
     ("The Fool", "consumer_median_amount", "Typical first step",
      "The Fool's $200 against the median purchase."),
+    ("The Magician", "frontier_query_count", "Performed expertise",
+     "Expertise is performed in front of an audience of questions. This counts the questions put to financial research systems."),
+    ("The High Priestess", "frontier_top_use_case_share", "Concentrated knowledge",
+     "Knowledge gathers where the questions gather. The share of queries sharing the most common use case."),
 ]

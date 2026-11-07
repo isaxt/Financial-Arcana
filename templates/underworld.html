@@ -3,12 +3,72 @@
 {% block title %}The Underworld{% endblock %}
 {% block content %}
 <h2 class="page-title">The Underworld</h2>
-{% call window("ACCESS RESTRICTED") %}
-  <p class="mono">&gt; connecting to transaction explorer…<br>
-     &gt; clearance: <b>insufficient</b><br>
-     &gt; reason: <b>this section opens in Phase 04</b></p>
-  <p>The Underworld will let members search transactions, filter by amount, payment format and flagged status,
-     and follow accounts through the ledger. It is an exploratory tool, not a fraud-detection service.</p>
-  <p class="dim">Until then, the Order recommends the <a href="{{ url_for('ledger') }}">Ledger</a>.</p>
+<p class="intro">A small exploratory tool for wandering through transactions from the IBM AML dataset.
+  It is an investigation toy, not a fraud-detection service, and a "flagged" label is the dataset's, not a verdict.</p>
+
+{% if total == 0 %}
+  {% call window("ACCESS RESTRICTED") %}
+    <p class="mono">&gt; transaction archive: <b>empty</b><br>&gt; to open it, run <code>python analysis/process_all.py</code> and restart the app.</p>
+  {% endcall %}
+{% else %}
+<p class="flash mono">▸ This archive holds a SAMPLE of {{ '{:,}'.format(total) }} transactions ({{ '{:,}'.format(flagged_in_sample) }} flagged):
+  every flagged row, up to a cap, plus randomly chosen others. Flagged transactions are over-represented here on purpose,
+  so the flagged share in this table is NOT the dataset's real rate (see the Ledger for that).</p>
+
+<form class="filters mono" method="get" action="{{ url_for('underworld') }}">
+  <input type="text" name="min_amount" value="{{ f.min_amount }}" placeholder="min amount" size="10">
+  <input type="text" name="max_amount" value="{{ f.max_amount }}" placeholder="max amount" size="10">
+  <select name="fmt">
+    <option value="">All payment formats</option>
+    {% for x in formats %}<option value="{{ x }}" {{ 'selected' if f.fmt == x }}>{{ x }}</option>{% endfor %}
+  </select>
+  <select name="status">
+    <option value="">Flagged and not</option>
+    <option value="flagged" {{ 'selected' if f.status == 'flagged' }}>Flagged only</option>
+    <option value="clean" {{ 'selected' if f.status == 'clean' }}>Not flagged only</option>
+  </select>
+  <input type="text" name="account" value="{{ f.account }}" placeholder="account id" size="14">
+  <button class="btn" type="submit">Investigate</button>
+  <a class="btn ghost" href="{{ url_for('underworld') }}">Reset</a>
+</form>
+<p class="mono dim small">Amounts are in each row's own currency (not converted), so amount filters compare unlike currencies.</p>
+
+{% if f.account and connections %}
+{% call window("Accounts connected to " ~ f.account) %}
+  <table class="ledger-table mono">
+    <thead><tr><th>Counterparty account</th><th>Transactions</th><th>Flagged</th></tr></thead>
+    <tbody>{% for acct, n, fl in connections %}
+      <tr><td><a href="{{ url_for('underworld', account=acct) }}">{{ acct }}</a></td><td>{{ n }}</td><td>{{ fl }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+  <p class="dim small">Only transactions in the sample are counted.</p>
 {% endcall %}
+{% endif %}
+
+<p class="mono dim small">{{ '{:,}'.format(results.total) }} matching transaction{{ '' if results.total == 1 else 's' }} · page {{ results.page }} of {{ results.pages or 1 }}</p>
+<table class="ledger-table mono">
+  <thead><tr><th>Time</th><th>From</th><th>To</th><th>Paid</th><th>Format</th><th>Label</th></tr></thead>
+  <tbody>
+  {% for t in results.items %}
+    <tr class="{{ 'flagged' if t.is_laundering }}">
+      <td>{{ t.timestamp }}</td>
+      <td>bank {{ t.from_bank }} · <a href="{{ url_for('underworld', account=t.from_account) }}">{{ t.from_account }}</a></td>
+      <td>bank {{ t.to_bank }} · <a href="{{ url_for('underworld', account=t.to_account) }}">{{ t.to_account }}</a></td>
+      <td>{{ '{:,.2f}'.format(t.amount_paid) }} <span class="dim">{{ t.payment_currency }}</span></td>
+      <td>{{ t.payment_format }}</td>
+      <td>{{ 'flagged' if t.is_laundering else '' }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="6">The archive has no record matching that query.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% if results.pages > 1 %}
+<p class="pager mono">
+  {% if results.has_prev %}<a href="{{ url_for('underworld', page=results.prev_num, **f) }}">◂ previous</a>{% endif %}
+  <span>page {{ results.page }} / {{ results.pages }}</span>
+  {% if results.has_next %}<a href="{{ url_for('underworld', page=results.next_num, **f) }}">next ▸</a>{% endif %}
+</p>
+{% endif %}
+{% endif %}
 {% endblock %}
