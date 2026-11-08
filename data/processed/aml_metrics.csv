@@ -1,6 +1,6 @@
 metric_name,value,unit,sample_size
-aml_flagged_rate,0.057499999999999996,%,1000000
-aml_flagged_median_amount,7568.6849999999995,USD,232
-aml_amount_cv,53.125459770019496,ratio,374569
-aml_flagged_account_count,384.0,count,575
-aml_top_format_share,44.4322,%,1000000
+aml_flagged_rate,0.10194266045335636,%,5078345
+aml_flagged_median_amount,5970.084999999999,USD,1912
+aml_amount_cv,57.876500819562615,ratio,1895172
+aml_flagged_account_count,3376.0,count,5177
+aml_top_format_share,36.71138924196761,%,5078345

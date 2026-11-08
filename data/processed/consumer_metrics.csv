@@ -1,6 +1,6 @@
 metric_name,value,unit,sample_size
-consumer_txns_per_user_mean,888.0994671403197,count,1000000
-consumer_top_category_share,11.892999999999999,%,1000000
-consumer_median_amount,32.72999954223633,USD,947249
-consumer_amount_cv,1.4969576844933739,ratio,947249
-consumer_fraud_rate,0.31750059708621925,%,669920
+consumer_txns_per_user_mean,10915.434782608696,count,13305915
+consumer_top_category_share,11.968992737440454,%,13305915
+consumer_median_amount,31.920000076293945,USD,12635227
+consumer_amount_cv,1.4632819641482244,ratio,12635227
+consumer_fraud_rate,0.14954633014180765,%,8914963
