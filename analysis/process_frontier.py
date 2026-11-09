@@ -4,9 +4,12 @@ Writes frontier_queries.json (for the Library page) and frontier_metrics.csv.
 
 Where the data comes from, in order:
   1. a file you put in data/raw/frontier_finance/  (.json, .jsonl or .csv)
-  2. Hugging Face's free public "datasets-server" API (no account, no extra packages);
-     the rows are saved to data/raw/frontier_finance/frontierfinance.json so the next
-     run works offline.
+  2. Hugging Face's own library, if installed (pip install datasets):
+         from datasets import load_dataset
+         ds = load_dataset("samaya-ai/FrontierFinance")
+  3. Hugging Face's free public "datasets-server" API (no account, no extra packages).
+  Whatever is downloaded is saved to data/raw/frontier_finance/frontierfinance.json so the
+  next run works offline.
 If neither works, the Library page simply stays empty.
 
 Columns used: query_id, query, query_date, use_cases (list), capabilities (list).
@@ -48,6 +51,18 @@ def fetch_rows():
         offset += 100
         if not got or offset >= page.get("num_rows_total", 0):
             return rows
+
+
+def fetch_with_datasets_library():
+    """The route Hugging Face recommends: pip install datasets, then load_dataset(...).
+    Returns None if the package is not installed."""
+    try:
+        from datasets import load_dataset
+    except ImportError:
+        return None
+    ds = load_dataset(DATASET)
+    split = ds["train"] if "train" in ds else ds[next(iter(ds))]
+    return [dict(r) for r in split]
 
 
 def load_local():
@@ -95,9 +110,12 @@ def as_date(v):
 def run():
     rows = load_local()
     if not rows:
-        print("  frontier: no local file; asking Hugging Face's public API ...")
+        print("  frontier: no local file; downloading from Hugging Face ...")
         try:
-            rows = fetch_rows()
+            rows = fetch_with_datasets_library()
+            if rows is None:
+                print("  frontier: 'datasets' package not installed; using Hugging Face's public API instead.")
+                rows = fetch_rows()
         except Exception as err:
             print(f"  frontier: skipped ({err.__class__.__name__}: {err}). "
                   f"Optional: save the dataset as .json in {RAW}.")
