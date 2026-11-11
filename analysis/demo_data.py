@@ -17,8 +17,6 @@ DEMO_METRIC_VALUES = {
     "consumer_median_amount": 28.0,
     "consumer_amount_cv": 1.8,
     "consumer_fraud_rate": 0.15,
-    "frontier_query_count": 220.0,
-    "frontier_top_use_case_share": 25.0,
 }
 
 DEMO_SAMPLE_SIZE = 0

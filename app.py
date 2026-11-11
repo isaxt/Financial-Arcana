@@ -4,7 +4,6 @@ import os
 import random
 import shutil
 import uuid
-from collections import Counter
 from datetime import date, datetime
 
 import pandas as pd
@@ -15,7 +14,7 @@ from sqlalchemy import inspect
 from analysis.demo_data import DEMO_CHARTS
 from config import Config
 from models import (AmlTransaction, Card, CardMetric, Dataset, FinancialMetric, Interpretation,
-                    Meta, Reading, ReadingCard, ResearchQuery, Spread, TaxonomyEntry, db)
+                    Meta, Reading, ReadingCard, Spread, TaxonomyEntry, db)
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -315,22 +314,6 @@ def underworld():
     flagged_in_sample = AmlTransaction.query.filter(AmlTransaction.is_laundering.is_(True)).count()
     return render_template("underworld.html", results=results, f=f, formats=formats, total=total,
                            flagged_in_sample=flagged_in_sample, connections=connections)
-
-
-@app.route("/library")
-def library():
-    text = request.args.get("q", "").strip()
-    use = request.args.get("use", "")
-    q = ResearchQuery.query
-    if text:
-        q = q.filter(ResearchQuery.query_text.ilike(f"%{text}%"))
-    if use:
-        q = q.filter(ResearchQuery.use_cases.ilike(f"%{use}%"))
-    page = request.args.get("page", 1, type=int)
-    results = q.order_by(ResearchQuery.id).paginate(page=page, per_page=20, error_out=False)
-    tags = Counter(t for r in ResearchQuery.query.all() for t in r.use_case_list)
-    return render_template("library.html", results=results, f=dict(q=text, use=use),
-                           tags=[t for t, _ in tags.most_common()], total=ResearchQuery.query.count())
 
 
 @app.route("/lexicon")

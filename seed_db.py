@@ -16,11 +16,11 @@ from analysis.card_mapping import CARD_MAP, DATASETS, METRICS
 from analysis.demo_data import DEMO_METRIC_VALUES, DEMO_SAMPLE_SIZE
 from config import Config
 from models import (AmlTransaction, Card, CardMetric, Dataset, FinancialMetric, Interpretation,
-                    ResearchQuery, Spread, TaxonomyEntry, db, utcnow)
+                    Spread, TaxonomyEntry, db, utcnow)
 
 ROOT = Path(__file__).resolve().parent
 PROCESSED = Path(Config.DATA_PROCESSED)
-METRIC_FILES = ("aml_metrics.csv", "consumer_metrics.csv", "frontier_metrics.csv")
+METRIC_FILES = ("aml_metrics.csv", "consumer_metrics.csv")
 # If any of these change, the database is reloaded the next time the app starts.
 WATCHED = [ROOT / "analysis" / "card_content.py", ROOT / "analysis" / "card_mapping.py",
            ROOT / "analysis" / "demo_data.py", Path(__file__).resolve()]
@@ -87,15 +87,6 @@ def load_aml_sample():
     records = df.where(df.notna(), None).to_dict("records")
     bulk_insert(AmlTransaction, records)
     return len(records)
-
-
-def load_frontier():
-    ResearchQuery.query.delete()
-    rows = read_json("frontier_queries.json") or []
-    bulk_insert(ResearchQuery, [dict(external_id=r["external_id"], query_text=r["query"], query_date=r["query_date"],
-                                     use_cases="; ".join(r["use_cases"]), capabilities="; ".join(r["capabilities"]))
-                                for r in rows])
-    return len(rows)
 
 
 def load_taxonomy_entries():
@@ -182,8 +173,8 @@ def seed():
         db.session.add(CardMetric(card_id=card.card_id, metric_id=metric.metric_id,
                                   relationship_label=rel, explanation=expl))
 
-    n_aml, n_front, n_tax = load_aml_sample(), load_frontier(), load_taxonomy_entries()
+    n_aml, n_tax = load_aml_sample(), load_taxonomy_entries()
     db.session.commit()
     print(f"Database loaded: {Card.query.count()} cards ({n_tarot} with Tarot JSON, {n_family} with taxonomy) | "
           f"{len(real)}/{len(METRICS)} real metrics | {n_aml:,} AML sample rows | "
-          f"{n_front} FrontierFinance queries | {n_tax} taxonomy entries")
+          f"{n_tax} taxonomy entries")

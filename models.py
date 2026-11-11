@@ -200,26 +200,6 @@ class AmlTransaction(db.Model):
     is_laundering = db.Column(db.Boolean, index=True)
 
 
-class ResearchQuery(db.Model):
-    """One row of the FrontierFinance dataset."""
-    __tablename__ = "research_queries"
-    id = db.Column(db.Integer, primary_key=True)
-    external_id = db.Column(db.String(80))
-    # "query" is Flask-SQLAlchemy's own Model.query, so the Python name differs from the column name.
-    query_text = db.Column("query", db.Text, nullable=False)
-    query_date = db.Column(db.String(30))
-    use_cases = db.Column(db.Text)                            # "; "-separated
-    capabilities = db.Column(db.Text)                         # "; "-separated
-
-    @property
-    def use_case_list(self):
-        return [x for x in (self.use_cases or "").split("; ") if x]
-
-    @property
-    def capability_list(self):
-        return [x for x in (self.capabilities or "").split("; ") if x]
-
-
 class TaxonomyEntry(db.Model):
     """Rows from the Contemporary Divinatory Arts Taxonomy (CC BY 4.0).
     kind: lexicon (glossary term), trust (trust signal), boundary (ethical boundary)."""

@@ -14,8 +14,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from analysis import (process_aml, process_frontier, process_taxonomy,   # noqa: E402
-                      process_tarot, process_transactions)
+from analysis import (process_aml, process_tarot,   # noqa: E402
+                      process_taxonomy, process_transactions)
 
 
 def attempt(label, func, *args, **kwargs):
@@ -32,7 +32,6 @@ def main():
     a = ap.parse_args()
     attempt("Tarot JSON", process_tarot.run)
     attempt("Divinatory Arts Taxonomy", process_taxonomy.run)
-    attempt("FrontierFinance", process_frontier.run)
     attempt("IBM AML transactions", process_aml.run, max_rows=a.max_rows)
     attempt("Consumer transactions", process_transactions.run, max_rows=a.max_rows)
     print("\nDone. Start the app with:  python app.py")
